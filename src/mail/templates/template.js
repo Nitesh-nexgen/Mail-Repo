@@ -1,8 +1,12 @@
+var fs = require('fs');
+var nexgenlogo = fs.createReadStream('C:/Users/HP/nodejs/smtp/src/mail/util/images/nexgenlogo.jpg');
+
 function getLeaveTemplate(body){
 
     return `<html>
                 <body>
-                    <p>
+                <img style = "width:250px" src="nexgenlogo" />
+                    <p>                    
                         Hi ${body.name},<br><br>
                         I am writing this letter to officially inform you that your ${body.type} leave from ${body.fromdate} to ${body.todate} have been
                         approved by ${body.approver}.

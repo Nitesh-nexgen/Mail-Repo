@@ -8,8 +8,15 @@ function send(temptype,mailparams,htmlBody)
         {
             from : mailparams.from,
             to : mailparams.to,
+            cc : mailparams.cc,
+            bcc : mailparams.bcc,
             subject : mailparams.subject,
-            html: htmlBody
+            html: htmlBody,
+            attachment:[{
+                filename : 'nexgenlogo',
+                path : 'C:/Users/HP/nodejs/smtp/src/mail/util/images/nexgenlogo.jpg',
+                cid : 'nexgenlogo' 
+            }]
         }
         return mailOptions;
     }    
@@ -19,6 +26,8 @@ function send(temptype,mailparams,htmlBody)
         {
             from : mailparams.from,
             to : mailparams.to,
+            cc : mailparams.cc,
+            bcc : mailparams.bcc,
             subject : mailparams.subject,
             html: htmlBody,
             attachment:[
