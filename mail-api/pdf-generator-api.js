@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const bodyparser = require('body-parser');
+const fs = require('fs');
 
 function getParams(body)
 {
@@ -27,56 +28,35 @@ function getParams(body)
             workemail : body.workemail
         };
         return params;
-    }
+    } 
 }
 app.use(bodyparser.json());
 
-app.post('/pdf/generate/',(req,res)=>
+app.get('/pdf/generate/',(err,res)=>
 {
-    console.log(req.body);
+    var rawdata = fs.readFileSync('../static-temp/json/daily-report.json');
+    var body = JSON.parse(rawdata);
+    console.log(body);
     
-    var params = getParams(req.body);
+    var params = getParams(body);
     //selecting the required template from req.body
     const pdf = require(`../src/mail/templates/pdf-templates/${params.template}-template`);
-
-    pdf.generate(`${params.template}-${params.name}`,params).then((data)=>
+    
+    pdf.generate(`${params.template}-${params.name}`,params,res).then((data)=>
     {
-        var response = 
-        {
-            statusCode : 200,
-            body: JSON.stringify({message: 'File generated Successfully.'})
-        }    
-
-        res.download(data.filedata.path,(err)=>
-        {
-            if(err)
-                console.log('error came while downloading file : '+err);
-            else
-            {
-                console.log('File downloaded successfully..');
-                res.end(response);
-                console.log(JSON.stringify(response));
-            }
-
-        })
-        
-
+        console.log('File downloaded successfully...'+JSON.stringify(data));
     }).catch((err)=>
     {
-        var response = 
-        {
-            statusCode : 401,
-            body: JSON.stringify({message: 'File generation failed.'+err})
-        }    
-        res.send(response);
-        console.log(JSON.stringify(response));
+        console.log('File cannot be downloaded due to following error : '+err);
     });
-      
+
 });
 
 app.listen(8091,(err)=>
 {
     if(err)
         throw err;
+
     console.log('listening at port 8091...');
 });
+

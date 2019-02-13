@@ -1,11 +1,15 @@
 const PDFdocument = require("pdfkit");
 const fs = require("fs");
 
-const dailyReport = (fileName, params) => 
-{
+const dailyReport = (fileName, params,res) => 
+{    
     // let path = './../../../../asset/pdf/daily-report.pdf'
     const doc = new PDFdocument();
-    doc.pipe(fs.createWriteStream("../src/mail/util/assets/pdf/" + fileName + ".pdf"));
+    res.writeHead(200,{
+        "Content-Type":"application/pdf",
+        "Content-disposition":"attachment; filename ="+fileName+".pdf"
+    });
+    doc.pipe(res);
     doc.image("../src/mail/util/assets/images/nexgenlogo.jpg", 450, 0, {
     fit: [120, 120]
     });
@@ -87,17 +91,14 @@ const dailyReport = (fileName, params) =>
         .fontSize(14)
         .text(`${params.workemail}`,50,490);
     doc.end();
+    
     return new Promise((resolve,reject)=>
     {
-        var path = __dirname+'/../../util/assets/pdf/'+fileName+'.pdf';
-        var file = fs.createReadStream(path);
-        var stat = fs.statSync(path);
-        var data = {
-            name : fileName,
-            filedata : file,
-            filestat : stat
+        var response = {
+            statusCode : 200,
+            body : JSON.stringify({message : 'PDF created successfully...'})
         }
-        resolve(data);
+        resolve(response);
     });
 };
 

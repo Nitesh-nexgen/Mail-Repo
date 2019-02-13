@@ -1,0 +1,9 @@
+{
+    "template" : "daily-report",
+    "date" : "13-02-2019",
+    "name" : "Manish Jain",
+    "department" : "Frontend",
+    "workdescription" : "nexgen portal component development",
+    "additionalnotes" : "Used react a lot",
+    "workemail" : "manishj@nexgeniots.com"
+}
